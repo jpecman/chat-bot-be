@@ -1,0 +1,43 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.ruff_cache/
+.direnv/
+result
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+*.egg-info/
+build/
+dist/
+
+# Env files (keep the example committed)
+.env.*
+!.env.example
+
+# Logs / local data
+*.log
+*.db
+*.sqlite3
+qdrant_storage/
+
+# Editors
+.idea/
+.vscode/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.DocumentRevisions-V100
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
