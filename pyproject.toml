@@ -10,7 +10,8 @@ dependencies = [
     "pydantic-settings>=2.6",
     "langchain>=1.4.6",
     "langchain-openai>=1.7.2",
-    "langchain-qdrant>=1.1.0",
+    "langchain-ollama>=1.1.0",
+    "qdrant-client>=1.19.1",
 ]
 
 [dependency-groups]
