@@ -1,10 +1,16 @@
+import logging
+from operator import itemgetter
+from typing import Any
+
 from langchain_core.documents import Document
 from langchain_core.language_models import BaseChatModel
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.retrievers import BaseRetriever
-from langchain_core.runnables import Runnable, RunnablePassthrough
+from langchain_core.runnables import Runnable, RunnableBranch, RunnablePassthrough
 
-from app.rag.prompts import ANSWER_PROMPT
+from app.rag.prompts import ANSWER_PROMPT, REWRITE_PROMPT
+
+logger = logging.getLogger(__name__)
 
 
 def format_docs(docs: list[Document]) -> str:
@@ -14,9 +20,25 @@ def format_docs(docs: list[Document]) -> str:
     )
 
 
-def create_rag_chain(retriever: BaseRetriever, llm: BaseChatModel) -> Runnable[str, str]:
+def log_standalone_question(inputs: dict[str, Any]) -> dict[str, Any]:
+    if inputs["history"]:
+        logger.info("Rewrote %r -> %r", inputs["question"], inputs["standalone"])
+    return inputs
+
+
+def create_rag_chain(retriever: BaseRetriever, llm: BaseChatModel) -> Runnable[dict[str, Any], str]:
+    rewrite = REWRITE_PROMPT | llm | StrOutputParser()
+
+    # First question of a session: nothing to rewrite, skip the extra LLM call.
+    standalone_question = RunnableBranch(
+        (lambda inputs: not inputs["history"], itemgetter("question")),
+        rewrite,
+    )
+
     return (
-        {"context": retriever | format_docs, "question": RunnablePassthrough()}
+        RunnablePassthrough.assign(standalone=standalone_question)
+        | log_standalone_question
+        | RunnablePassthrough.assign(context=itemgetter("standalone") | retriever | format_docs)
         | ANSWER_PROMPT
         | llm
         | StrOutputParser()

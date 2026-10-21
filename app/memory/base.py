@@ -1,0 +1,9 @@
+from typing import Protocol
+
+from langchain_core.messages import BaseMessage
+
+
+class ChatHistoryStore(Protocol):
+    async def get(self, session_id: str) -> list[BaseMessage]: ...
+    async def append(self, session_id: str, messages: list[BaseMessage]) -> None: ...
+    async def clear(self, session_id: str) -> None: ...
