@@ -16,7 +16,8 @@ class ChatService:
     async def ask(self, session_id: str, message: str) -> str:
         history = await self._history.get(session_id)
         answer = await self._chain.ainvoke(
-            {"question": message, "history": history[-MAX_HISTORY_MESSAGES:]}
+            {"question": message, "history": history[-MAX_HISTORY_MESSAGES:]},
+            config={"run_name": "chat", "metadata": {"langfuse_session_id": session_id}},
         )
 
         await self._history.append(session_id, [HumanMessage(message), AIMessage(answer)])
