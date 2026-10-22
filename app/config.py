@@ -24,6 +24,12 @@ class OllamaSettings(BaseModel):
     embedding_model: str
 
 
+class LangfuseSettings(BaseModel):
+    base_url: str
+    public_key: str
+    secret_key: SecretStr
+
+
 class Settings(BaseSettings):
     """Application settings loaded from environment variables / `.env`."""
 
@@ -41,6 +47,7 @@ class Settings(BaseSettings):
     azure_openai: AzureOpenAISettings
     ollama: OllamaSettings
     qdrant: QdrantSettings
+    langfuse: LangfuseSettings | None = None
 
 
 @lru_cache
