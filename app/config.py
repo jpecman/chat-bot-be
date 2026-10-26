@@ -22,6 +22,7 @@ class QdrantSettings(BaseModel):
 class OllamaSettings(BaseModel):
     base_url: str = "http://localhost:11434"
     embedding_model: str
+    query_instruction: str | None = None
 
 
 class LangfuseSettings(BaseModel):
