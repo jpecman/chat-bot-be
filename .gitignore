@@ -20,6 +20,7 @@ dist/
 !.env.example
 
 # Logs / local data
+eval/questions.jsonl
 *.log
 *.db
 *.sqlite3

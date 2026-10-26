@@ -19,6 +19,10 @@ cp .env.example .env            # fill in values
 uvicorn app.main:app --reload   # http://localhost:8000/docs (add --port 8001 if 8000 is taken)
 ```
 
+## Evaluation dataset
+
+Questions for evaluating retrieval and answers go in `eval/questions.jsonl`. It isn't committed because it depends on your local books. Start from `eval/questions.example.jsonl`, the same way as with `.env`.
+
 ## Endpoints
 
 | Method | Path | Description |
